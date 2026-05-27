@@ -40,9 +40,6 @@ npm run build
 ```bash
 php artisan serve
 ```
-
-Jika menggunakan Vite saat development:
-
 ```bash
 npm run dev
 ```
