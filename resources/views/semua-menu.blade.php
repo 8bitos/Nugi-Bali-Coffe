@@ -4,57 +4,106 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Semua Menu - Nugi Bali</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-            body { font-family: 'Poppins', sans-serif; }
+            .font-playfair {
+                font-family: 'Playfair Display', Georgia, serif;
+            }
+            .font-jakarta {
+                font-family: 'Plus Jakarta Sans', sans-serif;
+            }
         </style>
     </head>
-    <body class="bg-gradient-to-b from-gray-50 to-white">
+    <body class="bg-[#FAF9F6] font-jakarta text-slate-800 min-h-screen flex flex-col justify-between">
         {{-- Navigation --}}
         @include('layouts.partials.navbar')
 
-        {{-- Semua Menu Section --}}
-        <div class="max-w-7xl mx-auto px-8 py-20">
-            <h1 class="text-5xl font-bold bg-gradient-to-r from-gray-900 to-blue-600 bg-clip-text text-transparent mb-12 text-center">Semua Menu</h1>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 w-full flex-1">
+            <!-- Title Header -->
+            <div class="text-center mb-10">
+                <span class="text-[10px] font-bold text-blue-800 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-lg">Catalog</span>
+                <h1 class="text-3xl sm:text-5xl font-playfair font-bold text-blue-900 tracking-wide mt-3 mb-2">SEMUA MENU</h1>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium">Space . Moment . Togetherness</p>
+            </div>
 
             {{-- Filter Buttons --}}
-            <div class="flex justify-center gap-4 mb-12 flex-wrap">
+            <div class="flex justify-center gap-3 mb-10 flex-wrap">
                 <a href="{{ route('semua-menu', ['kategori' => 'semua']) }}" 
-                   class="px-6 py-2 rounded-lg font-bold transition-all duration-200 {{ $kategori === 'semua' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg' : 'bg-gray-200 text-gray-900 hover:bg-blue-100' }}">
+                   class="px-5 py-2 rounded-xl font-bold transition-all duration-200 text-xs {{ $kategori === 'semua' ? 'bg-blue-900 text-white shadow-sm' : 'bg-white text-slate-700 border border-slate-200/60 hover:bg-blue-50' }}">
                     SEMUA
                 </a>
                 <a href="{{ route('semua-menu', ['kategori' => 'Makanan']) }}" 
-                   class="px-6 py-2 rounded-lg font-bold transition-all duration-200 {{ $kategori === 'Makanan' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg' : 'bg-gray-200 text-gray-900 hover:bg-blue-100' }}">
+                   class="px-5 py-2 rounded-xl font-bold transition-all duration-200 text-xs {{ $kategori === 'Makanan' ? 'bg-blue-900 text-white shadow-sm' : 'bg-white text-slate-700 border border-slate-200/60 hover:bg-blue-50' }}">
                     MAKANAN
                 </a>
                 <a href="{{ route('semua-menu', ['kategori' => 'Minuman']) }}" 
-                   class="px-6 py-2 rounded-lg font-bold transition-all duration-200 {{ $kategori === 'Minuman' ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg' : 'bg-gray-200 text-gray-900 hover:bg-blue-100' }}">
+                   class="px-5 py-2 rounded-xl font-bold transition-all duration-200 text-xs {{ $kategori === 'Minuman' ? 'bg-blue-900 text-white shadow-sm' : 'bg-white text-slate-700 border border-slate-200/60 hover:bg-blue-50' }}">
                     MINUMAN
                 </a>
             </div>
 
-            {{-- Menu Grid (4 columns for more items display) --}}
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {{-- Menu Grid --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
                 @forelse($menus as $menu)
-                    <div class="bg-white rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                        <div class="bg-gradient-to-br from-blue-100 to-cyan-100 h-40 flex items-center justify-center text-gray-500">
+                    <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/60 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                        <div class="bg-gradient-to-br from-blue-50 to-cyan-50 h-36 flex items-center justify-center text-slate-400">
                             <div class="text-center">
-                                <div class="text-4xl mb-2">🍽️</div>
-                                <p class="text-sm font-semibold text-gray-600">{{ $menu->kategori }}</p>
+                                <div class="text-3xl mb-1">🍽️</div>
+                                <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{{ $menu->kategori }}</p>
                             </div>
                         </div>
                         <div class="p-4">
-                            <h3 class="text-base font-bold text-gray-900 mb-2">{{ $menu->nama_menu }}</h3>
-                            <p class="text-blue-600 font-bold">Rp {{ number_format($menu->harga, 0, ',', '.') }}</p>
+                            <h3 class="text-sm font-bold text-slate-800 mb-1 truncate">{{ $menu->nama_menu }}</h3>
+                            <p class="text-blue-600 font-bold text-sm">Rp {{ number_format($menu->harga, 0, ',', '.') }}</p>
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-4 text-center py-12">
-                        <p class="text-gray-500 text-lg">Menu tidak tersedia</p>
+                    <div class="col-span-full flex flex-col items-center justify-center py-20 text-slate-400">
+                        <svg class="w-16 h-16 text-slate-200 mb-4" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                        </svg>
+                        <p class="font-semibold text-sm">Menu tidak tersedia</p>
                     </div>
                 @endforelse
             </div>
         </div>
+
+        <!-- Footer -->
+        @php
+            $footerInfo = \App\Models\InformasiWeb::first();
+        @endphp
+        <footer class="bg-gradient-to-r from-blue-900 to-cyan-900 text-white mt-16 shrink-0">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-base font-bold mb-3 uppercase tracking-wider text-white">NUGI BALI</h3>
+                        <p class="text-blue-100/80 text-xs leading-relaxed">{{ $footerInfo?->profil ?? 'Coffee shop terbaik dengan pelayanan prima.' }}</p>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold mb-3 uppercase tracking-wider text-white">Menu</h3>
+                        <ul class="space-y-2 text-blue-100/80 text-xs">
+                            <li><a href="{{ route('home') }}" class="hover:text-white transition">Beranda</a></li>
+                            <li><a href="{{ route('menu') }}" class="hover:text-white transition">Menu</a></li>
+                            <li><a href="{{ route('tentang') }}" class="hover:text-white transition">Tentang</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold mb-3 uppercase tracking-wider text-white">Kontak</h3>
+                        <ul class="space-y-2 text-blue-100/80 text-xs">
+                            <li class="flex items-center gap-2">📧 {{ $footerInfo?->kontak_email ?? 'info@nugibali.com' }}</li>
+                            <li class="flex items-center gap-2">📞 {{ $footerInfo?->kontak_telepon ?? '+62 812-3456-7890' }}</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold mb-3 uppercase tracking-wider text-white">Slogan</h3>
+                        <p class="text-blue-100/80 text-xs italic">Space . Moment . Togetherness</p>
+                    </div>
+                </div>
+                <div class="border-t border-blue-800/60 mt-8 pt-6 text-center text-blue-200/60 text-xs">
+                    <p>&copy; 2026 NUGI BALI. Semua hak dilindungi.</p>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>
