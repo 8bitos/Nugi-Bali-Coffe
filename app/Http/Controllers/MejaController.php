@@ -12,7 +12,7 @@ class MejaController extends Controller
      */
     public function index()
     {
-        $meja = Meja::latest()->get();
+        $meja = Meja::latest()->paginate(15);
         return view('admin.meja.index', compact('meja'));
     }
 

@@ -6,6 +6,113 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Poppins', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* ===== Global Base Styles ===== */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Custom Utilities ===== */
+.font-poppins {
+    font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ===== Scrollbar Styling ===== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ===== Smooth Transitions ===== */
+a, button, input, select, textarea {
+    transition: all 0.15s ease;
+}
+
+/* ===== Table row hover highlight ===== */
+tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+/* ===== Focus ring consistency ===== */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    border-color: #3b82f6;
+}
+
+/* ===== Pagination Styling ===== */
+nav[role="navigation"] {
+    display: flex;
+    justify-content: center;
+}
+nav[role="navigation"] span[aria-current="page"] > span {
+    background: linear-gradient(135deg, #2563eb, #06b6d4) !important;
+    color: white !important;
+    border-color: transparent !important;
+    border-radius: 0.5rem !important;
+    font-weight: 600 !important;
+}
+nav[role="navigation"] a {
+    border-radius: 0.5rem !important;
+    font-weight: 500 !important;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-12px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+.animate-fade-in-up {
+    animation: fadeInUp 0.4s ease-out;
+}
+.animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+.animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+}
+
+/* ===== Card hover lift effect ===== */
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== Glass morphism utility ===== */
+.glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }

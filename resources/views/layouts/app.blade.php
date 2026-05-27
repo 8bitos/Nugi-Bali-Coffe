@@ -13,21 +13,28 @@
                 <img src="{{ asset('assets/images/logo.png') }}" alt="Nugi Bali" class="h-10">
                 <span class="text-2xl font-bold text-blue-600">Nugi Bali</span>
             </a>
-            <div class="flex gap-4">
+            <div class="flex items-center gap-4">
                 @auth
-                    <span>{{ auth()->user()->name }} ({{ auth()->user()->role }})</span>
                     @if(auth()->user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800">Dashboard</a>
+                        <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Dashboard</a>
+                    @else
+                        <a href="{{ route('pelanggan.dashboard') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Dashboard Saya</a>
+                        <a href="{{ route('pelanggan.reservasi') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Reservasi Saya</a>
                     @endif
-                    <a href="{{ route('auth.logout') }}" class="text-red-600 hover:text-red-800">Logout</a>
+                    <span class="text-gray-500 text-sm">{{ auth()->user()->name }}</span>
+                    <form method="POST" action="{{ route('auth.logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="text-red-600 hover:text-red-800 font-semibold text-sm">Logout</button>
+                    </form>
                 @else
-                    <a href="{{ route('auth.login') }}" class="text-blue-600 hover:text-blue-800">Login</a>
-                    <a href="{{ route('auth.register') }}" class="text-blue-600 hover:text-blue-800">Register</a>
-                    <a href="{{ route('admin.login') }}" class="text-purple-600 hover:text-purple-800">Admin</a>
+                    <a href="{{ route('auth.login') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Login</a>
+                    <a href="{{ route('auth.register') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Register</a>
+                    <a href="{{ route('admin.login') }}" class="text-purple-600 hover:text-purple-800 font-semibold text-sm">Admin</a>
                 @endauth
             </div>
         </div>
     </nav>
+
 
     <div class="max-w-7xl mx-auto py-6 px-4">
         @if($errors->any())

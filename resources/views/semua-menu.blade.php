@@ -12,32 +12,7 @@
     </head>
     <body class="bg-gradient-to-b from-gray-50 to-white">
         {{-- Navigation --}}
-        <nav class="bg-white shadow-md sticky top-0 z-50">
-            <div class="max-w-7xl mx-auto flex justify-between items-center px-8 py-4">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Nugi Bali Logo" class="h-12 object-contain">
-                    <a href="{{ route('home') }}" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-cyan-700 transition-all">NUGI BALI</a>
-                </div>
-                <div class="flex items-center space-x-8">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600 text-sm transition-colors duration-200">Beranda</a>
-                    <a href="{{ route('tentang') }}" class="text-gray-700 hover:text-blue-600 text-sm transition-colors duration-200">Tentang</a>
-                    <a href="{{ route('menu') }}" class="text-gray-700 hover:text-blue-600 text-sm font-semibold transition-colors duration-200">Menu</a>
-                    <a href="{{ route('galeri') }}" class="text-gray-700 hover:text-blue-600 text-sm transition-colors duration-200">Galeri</a>
-                    <a href="{{ route('lokasi') }}" class="text-gray-700 hover:text-blue-600 text-sm transition-colors duration-200">Lokasi</a>
-                    @auth
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
-                            <button type="submit" class="text-gray-700 hover:text-blue-600 text-sm transition-colors duration-200">Logout</button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 text-sm transition-colors duration-200">Login</a>
-                    @endauth
-                </div>
-                <a href="{{ route('reservasi.step1') }}" class="bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 text-white px-6 py-2 rounded-lg font-bold text-sm shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105">
-                    RESERVASI
-                </a>
-            </div>
-        </nav>
+        @include('layouts.partials.navbar')
 
         {{-- Semua Menu Section --}}
         <div class="max-w-7xl mx-auto px-8 py-20">

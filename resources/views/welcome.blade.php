@@ -9,62 +9,7 @@
 </head>
 <body class="bg-gradient-to-b from-gray-50 to-white font-poppins">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ !empty($info?->logo) ? asset('storage/' . $info->logo) : asset('assets/images/logo.png') }}" alt="Nugi Bali Logo" class="h-10 sm:h-12 object-contain">
-                    <a href="{{ route('home') }}" class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">NUGI BALI</a>
-                </div>
-                
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="mobileMenuBtn" class="text-gray-700 hover:text-blue-600 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Desktop menu -->
-                <div id="desktopMenu" class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600 text-sm font-semibold transition">Beranda</a>
-                    <a href="{{ route('tentang') }}" class="text-gray-700 hover:text-blue-600 text-sm transition">Tentang</a>
-                    <a href="{{ route('menu') }}" class="text-gray-700 hover:text-blue-600 text-sm transition">Menu</a>
-                    <a href="{{ route('galeri') }}" class="text-gray-700 hover:text-blue-600 text-sm transition">Galeri</a>
-                    <a href="{{ route('lokasi') }}" class="text-gray-700 hover:text-blue-600 text-sm transition">Lokasi</a>
-                    @auth
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
-                            <button type="submit" class="text-gray-700 hover:text-blue-600 text-sm transition">Logout</button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 text-sm transition">Login</a>
-                    @endauth
-                </div>
-
-                <a href="{{ route('reservasi.step1') }}" class="hidden sm:inline-block bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg font-bold text-sm hover:shadow-lg transition">RESERVASI</a>
-            </div>
-
-            <!-- Mobile menu -->
-            <div id="mobileMenu" class="hidden md:hidden mt-4 space-y-3 pb-4">
-                <a href="{{ route('home') }}" class="block text-gray-700 hover:text-blue-600 font-semibold">Beranda</a>
-                <a href="{{ route('tentang') }}" class="block text-gray-700 hover:text-blue-600">Tentang</a>
-                <a href="{{ route('menu') }}" class="block text-gray-700 hover:text-blue-600">Menu</a>
-                <a href="{{ route('galeri') }}" class="block text-gray-700 hover:text-blue-600">Galeri</a>
-                <a href="{{ route('lokasi') }}" class="block text-gray-700 hover:text-blue-600">Lokasi</a>
-                @auth
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="block w-full text-left text-gray-700 hover:text-blue-600">Logout</button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}" class="block text-gray-700 hover:text-blue-600">Login</a>
-                @endauth
-                <a href="{{ route('reservasi.step1') }}" class="block w-full bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 py-2 rounded-lg font-bold text-center text-sm hover:shadow-lg transition">RESERVASI</a>
-            </div>
-        </div>
-    </nav>
+    @include('layouts.partials.navbar')
 
     <!-- Hero Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
@@ -158,12 +103,6 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
-        document.getElementById('mobileMenuBtn')?.addEventListener('click', function() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
-        });
-
         // Hero slider
         (() => {
             const slides = Array.from(document.querySelectorAll('.hero-slide'));

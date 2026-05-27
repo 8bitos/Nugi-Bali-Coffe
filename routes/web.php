@@ -9,13 +9,10 @@ use App\Http\Controllers\MejaController;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\InformasiWebController;
 use App\Http\Controllers\MenuKategoriController;
+use App\Http\Controllers\PelangganController;
 
 // Home route
 Route::get('/', function () {
-    if (auth()->check() && auth()->user()->role === 'admin') {
-        return redirect()->route('admin.menu.index');
-    }
-
     $info = \App\Models\InformasiWeb::first();
     return view('welcome', ['info' => $info]);
 })->name('home');
@@ -52,24 +49,20 @@ Route::get('/menu', function () {
     $kategori = request('kategori', 'semua');
     $query = \App\Models\Menu::query();
     
-    if ($kategori !== 'semua') {
+    if ($kategori === 'Makanan') {
+        $query->whereIn('kategori', ['Rice Bowl', 'Munchies', 'Nugi Burger', 'Hotdog', 'Salad', 'Toast', 'Additional (Food)']);
+    } elseif ($kategori === 'Minuman') {
+        $query->whereIn('kategori', ['Coffee', 'Non Coffee', 'Signature', 'Milkshake', 'Tea', 'Fizzy Breeze', 'Smoothies', 'Additional (Drinks)']);
+    } elseif ($kategori !== 'semua') {
         $query->where('kategori', $kategori);
     }
     
-    $menus = $query->get();
+    $menus = $query->orderBy('position', 'asc')->get();
     return view('menu', ['menus' => $menus, 'kategori' => $kategori]);
 })->name('menu');
 
 Route::get('/semua-menu', function () {
-    $kategori = request('kategori', 'semua');
-    $query = \App\Models\Menu::query();
-    
-    if ($kategori !== 'semua') {
-        $query->where('kategori', $kategori);
-    }
-    
-    $menus = $query->get();
-    return view('semua-menu', ['menus' => $menus, 'kategori' => $kategori]);
+    return redirect()->route('menu');
 })->name('semua-menu');
 
 Route::get('/galeri', function () {
@@ -83,8 +76,14 @@ Route::get('/lokasi', function () {
     return view('lokasi', ['info' => $info]);
 })->name('lokasi');
 
-// Pelanggan reservation (no auth required)
-// Note: reservasi membutuhkan user_id pada tabel, jadi pelanggan wajib login.
+// Pelanggan dashboard (authenticated customers)
+Route::middleware(['auth'])->prefix('pelanggan')->name('pelanggan.')->group(function () {
+    Route::get('/dashboard', [PelangganController::class, 'dashboard'])->name('dashboard');
+    Route::get('/reservasi', [PelangganController::class, 'reservasi'])->name('reservasi');
+    Route::post('/reservasi/{id}/cancel', [PelangganController::class, 'cancelReservasi'])->name('reservasi.cancel');
+});
+
+// Pelanggan reservation (auth required)
 Route::middleware(['auth'])->group(function () {
     // Multi-step reservation
     Route::get('/reservasi', [ReservasiController::class, 'step1'])->name('reservasi.step1');
@@ -106,10 +105,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Dashboard
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/reservasi/report', [DashboardController::class, 'reservasiReport'])->name('admin.reservasi.report');
-    Route::get('/admin/reservasi/export', [DashboardController::class, 'exportReservasi'])->name('admin.reservasi.export');
+    Route::get('/admin/reservasi/export', [DashboardController::class, 'exportPage'])->name('admin.reservasi.export');
+    Route::get('/admin/reservasi/export/download', [DashboardController::class, 'exportDownload'])->name('admin.reservasi.export.download');
 
     // Resource routes (prefixed with /admin)
     Route::prefix('admin')->name('admin.')->group(function () {
+        Route::post('menu/reorder', [MenuController::class, 'reorder'])->name('menu.reorder');
         Route::resource('menu', MenuController::class);
         Route::post('menu-kategori', [MenuKategoriController::class, 'store'])->name('menu-kategori.store');
         Route::delete('menu-kategori/{id}', [MenuKategoriController::class, 'destroy'])->name('menu-kategori.destroy');

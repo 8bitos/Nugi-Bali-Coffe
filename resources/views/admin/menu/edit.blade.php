@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('admin.layout')
 
 @section('title', 'Edit Menu')
 @section('page_title', 'Edit Menu')
@@ -9,7 +9,7 @@
         <div class="flex items-center justify-between border-b border-slate-100 p-6">
             <div>
                 <div class="text-base font-extrabold text-slate-900">{{ $menu->nama_menu }}</div>
-                <div class="mt-1 text-sm text-slate-500">Perbarui detail menu, foto, dan kategori.</div>
+                <div class="mt-1 text-sm text-slate-500">Perbarui detail menu dan kategori.</div>
             </div>
             <a href="{{ route('admin.menu.index') }}" class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Kembali</a>
         </div>
@@ -54,29 +54,7 @@
                     <textarea name="deskripsi" rows="4" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-300 focus:ring-4 focus:ring-blue-100">{{ old('deskripsi', $menu->deskripsi) }}</textarea>
                 </div>
 
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
-                        <label class="mb-2 block text-sm font-semibold text-slate-700">Foto (opsional)</label>
-                        <input type="file" name="foto" accept="image/*" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-blue-700">
-                        <div class="mt-2 text-xs text-slate-500">Upload baru untuk mengganti foto.</div>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                        <div class="text-xs font-bold uppercase tracking-widest text-slate-500">Preview</div>
-                        <div class="mt-3 flex items-center gap-3">
-                            <div class="h-16 w-16 overflow-hidden rounded-xl bg-white ring-1 ring-black/5">
-                                @if($menu->foto)
-                                    <img src="{{ asset('storage/' . $menu->foto) }}" class="h-full w-full object-cover" alt="Foto Menu">
-                                @else
-                                    <div class="flex h-full w-full items-center justify-center text-xs font-bold text-slate-400">No</div>
-                                @endif
-                            </div>
-                            <div class="min-w-0">
-                                <div class="truncate text-sm font-extrabold text-slate-900">{{ $menu->nama_menu }}</div>
-                                <div class="mt-1 text-sm text-blue-700 font-extrabold">Rp {{ number_format((int)round((float)$menu->harga), 0, ',', '.') }}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
 
                 <div class="flex flex-col gap-2 sm:flex-row sm:justify-end">
                     <a href="{{ route('admin.menu.index') }}" class="rounded-xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">Batal</a>
@@ -92,7 +70,7 @@
     <div class="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl ring-1 ring-black/10">
         <div class="flex items-center justify-between">
             <div class="text-base font-extrabold text-slate-900">Tambah Kategori</div>
-            <button type="button" id="btnCloseKategori" class="rounded-lg p-2 text-slate-500 hover:bg-slate-100">✕</button>
+            <button type="button" id="btnCloseKategori" class="rounded-lg p-2 text-slate-500 hover:bg-slate-100"></button>
         </div>
         <div class="mt-4 space-y-3">
             <label class="block text-sm font-semibold text-slate-700">Nama Kategori</label>

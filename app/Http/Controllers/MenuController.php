@@ -14,7 +14,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $menus = Menu::latest()->get();
+        $menus = Menu::orderBy('position', 'asc')->get();
         $kategori = MenuKategori::orderBy('nama')->get();
         return view('admin.menu.index', compact('menus', 'kategori'));
     }
@@ -44,6 +44,10 @@ class MenuController extends Controller
         if ($request->hasFile('foto')) {
             $validated['foto'] = $request->file('foto')->store('menu', 'public');
         }
+
+        // Set position to max + 1
+        $maxPosition = Menu::where('kategori', $validated['kategori'])->max('position') ?? 0;
+        $validated['position'] = $maxPosition + 1;
 
         Menu::create($validated);
         return redirect()->route('admin.menu.index')->with('success', 'Menu berhasil ditambahkan');
@@ -104,5 +108,49 @@ class MenuController extends Controller
         }
         $menu->delete();
         return redirect()->route('admin.menu.index')->with('success', 'Menu berhasil dihapus');
+    }
+
+    /**
+     * Reorder menu items via AJAX
+     */
+    public function reorder(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:menu,id',
+            'direction' => 'required|in:up,down',
+        ]);
+
+        $item = Menu::findOrFail($request->id);
+        $direction = $request->direction;
+
+        // Find the adjacent item in the same category
+        if ($direction === 'up') {
+            $adjacent = Menu::where('kategori', $item->kategori)
+                ->where('position', '<', $item->position)
+                ->orderBy('position', 'desc')
+                ->first();
+        } else {
+            $adjacent = Menu::where('kategori', $item->kategori)
+                ->where('position', '>', $item->position)
+                ->orderBy('position', 'asc')
+                ->first();
+        }
+
+        if ($adjacent) {
+            // Swap positions
+            $temp = $item->position;
+            $item->update(['position' => $adjacent->position]);
+            $adjacent->update(['position' => $temp]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Susunan menu berhasil diubah',
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Menu sudah berada di posisi paling ' . ($direction === 'up' ? 'atas' : 'bawah'),
+        ]);
     }
 }

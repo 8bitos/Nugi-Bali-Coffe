@@ -9,23 +9,7 @@
 </head>
 <body class="bg-gradient-to-b from-gray-50 to-white font-poppins">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="h-10 sm:h-12 object-contain">
-                    <a href="{{ route('home') }}" class="text-xl sm:text-2xl font-bold text-blue-700">NUGI BALI</a>
-                </div>
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-slate-700 hover:text-blue-600 transition">Beranda</a>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="text-slate-700 hover:text-blue-600 transition">Logout</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('layouts.partials.navbar')
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <!-- Step Indicator -->

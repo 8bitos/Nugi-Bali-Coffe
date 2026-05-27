@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('admin.layout')
 @section('title','Tambah Info')
 @section('page_title','Tambah Informasi Web')
 @section('content')
@@ -22,6 +22,6 @@
     <input name="landing_cta_url" value="{{ old('landing_cta_url') }}" placeholder="URL Tombol CTA (contoh: /reservasi)" class="mb-3 w-full rounded border px-3 py-2">
     <div><label class="mb-1 block text-sm font-medium">Carousel Slides (bisa pilih banyak gambar)</label><input type="file" name="landing_slides[]" accept="image/*" multiple class="w-full rounded border px-3 py-2"></div>
 </div>
-<div class="flex gap-2"><button class="rounded bg-[#0f766e] px-4 py-2 text-sm font-semibold text-white">Simpan</button><a href="{{ route('admin.informasi-web.index') }}" class="rounded border px-4 py-2 text-sm">Batal</a></div>
+<div class="flex gap-2"><button class="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white">Simpan</button><a href="{{ route('admin.informasi-web.index') }}" class="rounded border px-4 py-2 text-sm">Batal</a></div>
 </form>
 @endsection

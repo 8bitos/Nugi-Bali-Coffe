@@ -8,30 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gradient-to-b from-gray-50 to-white font-poppins">
-<nav class="bg-white shadow-lg sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="Nugi Bali Logo" class="h-10 sm:h-12 object-contain">
-                <a href="{{ route('home') }}" class="text-xl sm:text-2xl font-bold text-blue-700">NUGI BALI</a>
-            </div>
-            <div class="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm">
-                <a href="{{ route('home') }}" class="text-slate-700 hover:text-blue-600 transition">Beranda</a>
-                <a href="{{ route('tentang') }}" class="text-slate-700 hover:text-blue-600 transition">Tentang</a>
-                <a href="{{ route('menu') }}" class="text-slate-700 hover:text-blue-600 transition">Menu</a>
-                <a href="{{ route('galeri') }}" class="font-semibold text-blue-700">Galeri</a>
-                <a href="{{ route('lokasi') }}" class="text-slate-700 hover:text-blue-600 transition">Lokasi</a>
-                @auth
-                <form method="POST" action="{{ route('logout') }}" class="inline">
-                    @csrf
-                    <button type="submit" class="text-slate-700 hover:text-blue-600 transition">Logout</button>
-                </form>
-                @endauth
-            </div>
-            <a href="{{ route('reservasi.step1') }}" class="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg font-bold text-sm hover:shadow-lg transition">RESERVASI</a>
-        </div>
-    </div>
-</nav>
+@include('layouts.partials.navbar')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
     <h1 class="text-4xl sm:text-5xl font-bold text-slate-800 mb-12 text-center">GALERI</h1>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

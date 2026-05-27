@@ -23,7 +23,7 @@ class InformasiWebController extends Controller
      */
     public function create()
     {
-        return view('admin.informasi.create');
+        return redirect()->route('admin.informasi-web.index');
     }
 
     /**
@@ -31,50 +31,7 @@ class InformasiWebController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama_web' => 'sometimes|string|max:255',
-            'profil' => 'nullable|string',
-            'kontak_email' => 'nullable|email',
-            'kontak_telepon' => 'nullable|string|max:20',
-            'alamat' => 'nullable|string',
-            'lokasi_url' => 'nullable|url',
-            'instagram_url' => 'nullable|url',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
-            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'tentang_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'lokasi_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
-            'landing_title' => 'nullable|string|max:255',
-            'landing_subtitle' => 'nullable|string',
-            'landing_cta_text' => 'nullable|string|max:100',
-            'landing_cta_url' => 'nullable|string|max:255',
-            'landing_slides' => 'nullable|array|max:10',
-            'landing_slides.*' => 'image|mimes:jpeg,png,jpg,webp|max:4096',
-        ]);
-
-        if ($request->hasFile('logo')) {
-            $validated['logo'] = $request->file('logo')->store('informasi', 'public');
-        }
-
-        if ($request->hasFile('hero_image')) {
-            $validated['hero_image'] = $request->file('hero_image')->store('informasi', 'public');
-        }
-        if ($request->hasFile('tentang_image')) {
-            $validated['tentang_image'] = $request->file('tentang_image')->store('informasi', 'public');
-        }
-        if ($request->hasFile('lokasi_image')) {
-            $validated['lokasi_image'] = $request->file('lokasi_image')->store('informasi', 'public');
-        }
-
-        if ($request->hasFile('landing_slides')) {
-            $slidePaths = [];
-            foreach ($request->file('landing_slides') as $slide) {
-                $slidePaths[] = $slide->store('landing-slides', 'public');
-            }
-            $validated['landing_slides'] = $slidePaths;
-        }
-
-        InformasiWeb::create($validated);
-        return redirect()->route('admin.informasi-web.index')->with('success', 'Informasi berhasil ditambahkan');
+        return redirect()->route('admin.informasi-web.index');
     }
 
     /**
@@ -82,7 +39,7 @@ class InformasiWebController extends Controller
      */
     public function show(string $id)
     {
-        return redirect()->route('admin.informasi-web.edit', $id);
+        return redirect()->route('admin.informasi-web.index');
     }
 
     /**
@@ -90,8 +47,7 @@ class InformasiWebController extends Controller
      */
     public function edit(string $id)
     {
-        $informasi = InformasiWeb::findOrFail($id);
-        return view('admin.informasi.edit', compact('informasi'));
+        return redirect()->route('admin.informasi-web.index');
     }
 
     /**
@@ -202,6 +158,21 @@ class InformasiWebController extends Controller
     public function updateLanding(Request $request)
     {
         $validated = $request->validate([
+            'nama_web' => 'sometimes|string|max:255',
+            'profil' => 'nullable|string',
+            'kontak_email' => 'nullable|email',
+            'kontak_telepon' => 'nullable|string|max:20',
+            'alamat' => 'nullable|string',
+            'lokasi_url' => 'nullable|url',
+            'instagram_url' => 'nullable|url',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,webp,svg|max:2048',
+            'hero_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
+            'tentang_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
+            'lokasi_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:4096',
+            'remove_logo' => 'nullable|boolean',
+            'remove_hero_image' => 'nullable|boolean',
+            'remove_tentang_image' => 'nullable|boolean',
+            'remove_lokasi_image' => 'nullable|boolean',
             'landing_title' => 'nullable|string|max:255',
             'landing_subtitle' => 'nullable|string',
             'landing_cta_text' => 'nullable|string|max:100',
@@ -216,6 +187,55 @@ class InformasiWebController extends Controller
         ]);
 
         $info = InformasiWeb::firstOrCreate([], ['nama_web' => 'Nugi Bali']);
+
+        // Handle single image uploads/removals
+        if ($request->hasFile('logo')) {
+            if ($info->logo) {
+                Storage::disk('public')->delete($info->logo);
+            }
+            $validated['logo'] = $request->file('logo')->store('informasi', 'public');
+        } elseif ($request->boolean('remove_logo')) {
+            if ($info->logo) {
+                Storage::disk('public')->delete($info->logo);
+            }
+            $validated['logo'] = null;
+        }
+
+        if ($request->hasFile('hero_image')) {
+            if ($info->hero_image) {
+                Storage::disk('public')->delete($info->hero_image);
+            }
+            $validated['hero_image'] = $request->file('hero_image')->store('informasi', 'public');
+        } elseif ($request->boolean('remove_hero_image')) {
+            if ($info->hero_image) {
+                Storage::disk('public')->delete($info->hero_image);
+            }
+            $validated['hero_image'] = null;
+        }
+
+        if ($request->hasFile('tentang_image')) {
+            if ($info->tentang_image) {
+                Storage::disk('public')->delete($info->tentang_image);
+            }
+            $validated['tentang_image'] = $request->file('tentang_image')->store('informasi', 'public');
+        } elseif ($request->boolean('remove_tentang_image')) {
+            if ($info->tentang_image) {
+                Storage::disk('public')->delete($info->tentang_image);
+            }
+            $validated['tentang_image'] = null;
+        }
+
+        if ($request->hasFile('lokasi_image')) {
+            if ($info->lokasi_image) {
+                Storage::disk('public')->delete($info->lokasi_image);
+            }
+            $validated['lokasi_image'] = $request->file('lokasi_image')->store('informasi', 'public');
+        } elseif ($request->boolean('remove_lokasi_image')) {
+            if ($info->lokasi_image) {
+                Storage::disk('public')->delete($info->lokasi_image);
+            }
+            $validated['lokasi_image'] = null;
+        }
 
         if ($request->boolean('remove_landing_slides') && is_array($info->landing_slides)) {
             foreach ($info->landing_slides as $oldSlide) {
@@ -262,6 +282,6 @@ class InformasiWebController extends Controller
         }
 
         $info->update($validated);
-        return redirect()->route('admin.informasi-web.index')->with('success', 'Landing page info berhasil diperbarui.');
+        return redirect()->route('admin.informasi-web.index')->with('success', 'Informasi website berhasil diperbarui.');
     }
 }

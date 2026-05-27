@@ -282,8 +282,7 @@ class ReservasiController extends Controller
      */
     public function create()
     {
-        $meja = Meja::where('status', 'tersedia')->get();
-        return view('reservasi.create', compact('meja'));
+        return redirect()->route('reservasi.step1');
     }
 
     /**

@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('admin.layout')
 @section('title','Laporan Reservasi')
 @section('page_title','Laporan Reservasi')
 @section('content')

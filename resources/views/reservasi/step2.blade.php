@@ -9,23 +9,7 @@
 </head>
 <body class="bg-gradient-to-b from-gray-50 to-white font-poppins">
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" class="h-10 sm:h-12 object-contain">
-                    <a href="{{ route('home') }}" class="text-xl sm:text-2xl font-bold text-blue-700">NUGI BALI</a>
-                </div>
-                <div class="hidden md:flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-slate-700 hover:text-blue-600 transition">Beranda</a>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="text-slate-700 hover:text-blue-600 transition">Logout</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </nav>
+    @include('layouts.partials.navbar')
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         <!-- Step Indicator -->
@@ -79,14 +63,39 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">No. Telepon</label>
                     <div class="flex gap-2">
-                        <!-- Country Code Selector -->
-                        <select name="country_code" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent w-24">
-                            <option value="ID" selected>🇮🇩 +62</option>
-                            <option value="MY">🇲🇾 +60</option>
-                            <option value="SG">🇸🇬 +65</option>
-                            <option value="TH">🇹🇭 +66</option>
-                            <option value="PH">🇵🇭 +63</option>
-                        </select>
+                        <!-- Custom Country Code Selector with flag images -->
+                        <div class="relative w-28 shrink-0" id="countryDropdownContainer">
+                            <button type="button" id="countryDropdownBtn" class="flex w-full items-center justify-between gap-1.5 px-3 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:border-transparent cursor-pointer h-10 select-none">
+                                <span class="flex items-center gap-1.5" id="selectedCountry">
+                                    <img src="https://flagcdn.com/w20/id.png" alt="ID" class="w-5 h-3.5 object-cover rounded shadow-sm">
+                                    <span class="font-medium text-sm text-gray-800">+62</span>
+                                </span>
+                                <svg class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                            </button>
+                            <div id="countryDropdownList" class="absolute left-0 mt-1 w-48 bg-white border border-gray-100 rounded-xl shadow-xl py-1 hidden z-50 transform origin-top-left transition-all duration-200">
+                                <button type="button" data-code="ID" data-dial="+62" data-flag="id" class="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition cursor-pointer text-left w-full">
+                                    <img src="https://flagcdn.com/w20/id.png" alt="ID" class="w-5 h-3.5 object-cover rounded shadow-sm shrink-0">
+                                    <span class="font-medium">Indonesia (+62)</span>
+                                </button>
+                                <button type="button" data-code="MY" data-dial="+60" data-flag="my" class="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition cursor-pointer text-left w-full">
+                                    <img src="https://flagcdn.com/w20/my.png" alt="MY" class="w-5 h-3.5 object-cover rounded shadow-sm shrink-0">
+                                    <span class="font-medium">Malaysia (+60)</span>
+                                </button>
+                                <button type="button" data-code="SG" data-dial="+65" data-flag="sg" class="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition cursor-pointer text-left w-full">
+                                    <img src="https://flagcdn.com/w20/sg.png" alt="SG" class="w-5 h-3.5 object-cover rounded shadow-sm shrink-0">
+                                    <span class="font-medium">Singapore (+65)</span>
+                                </button>
+                                <button type="button" data-code="TH" data-dial="+66" data-flag="th" class="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition cursor-pointer text-left w-full">
+                                    <img src="https://flagcdn.com/w20/th.png" alt="TH" class="w-5 h-3.5 object-cover rounded shadow-sm shrink-0">
+                                    <span class="font-medium">Thailand (+66)</span>
+                                </button>
+                                <button type="button" data-code="PH" data-dial="+63" data-flag="ph" class="flex w-full items-center gap-2.5 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition cursor-pointer text-left w-full">
+                                    <img src="https://flagcdn.com/w20/ph.png" alt="PH" class="w-5 h-3.5 object-cover rounded shadow-sm shrink-0">
+                                    <span class="font-medium">Philippines (+63)</span>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" name="country_code" id="country_code" value="{{ old('country_code', 'ID') }}">
                         <!-- Phone Number Input -->
                         <input type="tel" name="kontak_pemesan" value="{{ old('kontak_pemesan') }}" 
                                placeholder="8xx-xxxx-xxxx"
@@ -156,5 +165,58 @@
             </div>
         </div>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownBtn = document.getElementById('countryDropdownBtn');
+            const dropdownList = document.getElementById('countryDropdownList');
+            const selectedCountry = document.getElementById('selectedCountry');
+            const countryCodeInput = document.getElementById('country_code');
+
+            // Toggle dropdown list
+            dropdownBtn?.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownList?.classList.toggle('hidden');
+            });
+
+            // Close dropdown list when clicking outside
+            document.addEventListener('click', function() {
+                dropdownList?.classList.add('hidden');
+            });
+
+            // Select country option
+            dropdownList?.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const code = this.getAttribute('data-code');
+                    const dial = this.getAttribute('data-dial');
+                    const flag = this.getAttribute('data-flag');
+
+                    // Update button UI
+                    selectedCountry.innerHTML = `
+                        <img src="https://flagcdn.com/w20/${flag}.png" alt="${code}" class="w-5 h-3.5 object-cover rounded shadow-sm">
+                        <span class="font-medium text-sm text-gray-800">${dial}</span>
+                    `;
+
+                    // Update hidden input value
+                    countryCodeInput.value = code;
+
+                    // Close dropdown list
+                    dropdownList.classList.add('hidden');
+                });
+            });
+
+            // Handle old/existing value on load
+            const currentCode = countryCodeInput.value || 'ID';
+            const activeOption = dropdownList?.querySelector(`button[data-code="${currentCode}"]`);
+            if (activeOption) {
+                const dial = activeOption.getAttribute('data-dial');
+                const flag = activeOption.getAttribute('data-flag');
+                selectedCountry.innerHTML = `
+                    <img src="https://flagcdn.com/w20/${flag}.png" alt="${currentCode}" class="w-5 h-3.5 object-cover rounded shadow-sm">
+                    <span class="font-medium text-sm text-gray-800">${dial}</span>
+                `;
+            }
+        });
+    </script>
 </body>
 </html>
