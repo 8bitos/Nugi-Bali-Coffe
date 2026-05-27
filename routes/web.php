@@ -88,6 +88,7 @@ Route::get('/lokasi', function () {
 Route::middleware(['auth'])->group(function () {
     // Multi-step reservation
     Route::get('/reservasi', [ReservasiController::class, 'step1'])->name('reservasi.step1');
+    Route::get('/reservasi/check-available', [ReservasiController::class, 'checkAvailableTables'])->name('reservasi.check');
     Route::post('/reservasi/step2', [ReservasiController::class, 'step2'])->name('reservasi.step2');
     Route::post('/reservasi/step3', [ReservasiController::class, 'step3'])->name('reservasi.step3');
     Route::post('/reservasi/step4', [ReservasiController::class, 'step4'])->name('reservasi.step4');

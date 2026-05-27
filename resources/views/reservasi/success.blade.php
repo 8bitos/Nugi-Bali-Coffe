@@ -93,7 +93,13 @@
                         </div>
                         <div>
                             <p class="text-gray-600 text-sm">Nomor Telepon</p>
-                            <p class="font-semibold">{{ $reservasi->kontak_pemesan }}</p>
+                            <p class="font-semibold">
+                                @php
+                                    $countryFlags = ['ID' => '🇮🇩', 'MY' => '🇲🇾', 'SG' => '🇸🇬', 'TH' => '🇹🇭', 'PH' => '🇵🇭'];
+                                    $flag = $countryFlags[$reservasi->country_code ?? 'ID'] ?? '🌍';
+                                @endphp
+                                {{ $flag }} {{ $reservasi->kontak_pemesan }}
+                            </p>
                         </div>
                         <div>
                             <p class="text-gray-600 text-sm">Email</p>

@@ -105,6 +105,19 @@
                     @enderror
                 </div>
 
+                <!-- Status Legend -->
+                <div class="mt-2 text-sm">
+                    <span class="inline-flex items-center mr-4">
+                        <span class="w-3 h-3 bg-green-400 rounded-full inline-block mr-2"></span> Tersedia
+                    </span>
+                    <span class="inline-flex items-center mr-4">
+                        <span class="w-3 h-3 bg-gray-400 rounded-full inline-block mr-2"></span> Maintenance
+                    </span>
+                    <span class="inline-flex items-center">
+                        <span class="w-3 h-3 bg-yellow-400 rounded-full inline-block mr-2"></span> Sudah Dibooking
+                    </span>
+                </div>
+
                 <!-- Summary -->
                 <div class="bg-blue-50 rounded-lg p-4 sm:p-6 border border-blue-200">
                     <h3 class="font-semibold text-gray-800 mb-3">Ringkasan</h3>
@@ -164,27 +177,86 @@
         const mejaSelect = document.querySelector('select[name="meja_id"]');
         const jumlahOrangInput = document.querySelector('input[name="jumlah_orang"]');
         const biayaMejaSpan = document.getElementById('biayaMeja');
+        const tanggalInput = document.querySelector('input[name="tanggal_reservasi"]');
+
+        async function fetchAvailability(tanggal) {
+            if (!tanggal) return;
+            try {
+                const url = `{{ route('reservasi.check') }}?tanggal=${encodeURIComponent(tanggal)}`;
+                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                if (!res.ok) return;
+                const data = await res.json();
+
+                // Update options based on status
+                Array.from(mejaSelect.options).forEach(opt => {
+                    if (!opt.value) return; // skip placeholder
+                    const m = data.find(x => String(x.id) === String(opt.value));
+                    if (!m) return;
+                    opt.disabled = false;
+                    // reset text to base label
+                    const baseLabel = `Meja ${m.nomor_meja} (${m.kapasitas} orang) - Rp ${Number(m.harga || 0).toLocaleString('id-ID')}`;
+                    opt.text = baseLabel;
+                    opt.dataset.kapasitas = m.kapasitas;
+                    opt.dataset.harga = m.harga;
+                    // reset title/style
+                    opt.title = '';
+                    try { opt.style.color = ''; } catch(e) {}
+
+                    if (m.status === 'maintenance') {
+                        opt.disabled = true;
+                        opt.text = baseLabel + ' (Maintenance)';
+                        opt.title = 'Meja sedang maintenance';
+                        try { opt.style.color = '#9CA3AF'; } catch(e) {}
+                    } else if (m.status === 'booked') {
+                        opt.disabled = true;
+                        opt.text = baseLabel + ' (Sudah Dibooking)';
+                        opt.title = 'Meja sudah dibooking pada tanggal ini';
+                        try { opt.style.color = '#D97706'; } catch(e) {}
+                    }
+                });
+
+                // If currently selected option is disabled, clear selection
+                const selectedOpt = mejaSelect.options[mejaSelect.selectedIndex];
+                if (selectedOpt && selectedOpt.disabled) {
+                    mejaSelect.value = '';
+                    updateSummary();
+                }
+            } catch (err) {
+                console.error('Failed to fetch availability', err);
+            }
+        }
 
         function updateSummary() {
             const selectedOption = mejaSelect.options[mejaSelect.selectedIndex];
-            const harga = parseInt(selectedOption.dataset.harga) || 0;
-            const kapasitas = parseInt(selectedOption.dataset.kapasitas) || 0;
+            const harga = parseInt(selectedOption?.dataset.harga) || 0;
+            const kapasitas = parseInt(selectedOption?.dataset.kapasitas) || 0;
             const jumlahOrang = parseInt(jumlahOrangInput.value) || 1;
 
             // Update display
             biayaMejaSpan.textContent = 'Rp ' + harga.toLocaleString('id-ID');
 
             // Validate capacity
-            if (jumlahOrang > kapasitas && selectedOption.value) {
+            if (jumlahOrang > kapasitas && selectedOption && selectedOption.value) {
                 jumlahOrangInput.classList.add('border-red-500');
             } else {
                 jumlahOrangInput.classList.remove('border-red-500');
             }
         }
 
+        // Trigger availability check when date changes
+        tanggalInput.addEventListener('change', (e) => {
+            fetchAvailability(e.target.value);
+        });
+
         mejaSelect.addEventListener('change', updateSummary);
         jumlahOrangInput.addEventListener('change', updateSummary);
-        updateSummary();
+
+        // Initial load: if date already selected, fetch availability
+        if (tanggalInput.value) {
+            fetchAvailability(tanggalInput.value).then(() => updateSummary());
+        } else {
+            updateSummary();
+        }
     </script>
 </body>
 </html>

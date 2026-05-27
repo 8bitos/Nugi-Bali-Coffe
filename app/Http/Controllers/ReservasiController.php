@@ -61,8 +61,57 @@ class ReservasiController extends Controller
         // Clear session from previous attempt
         session()->forget(['reservasi_temp']);
         
-        $meja = Meja::where('status', 'tersedia')->get();
+        $meja = Meja::get();
         return view('reservasi.step1', compact('meja'));
+    }
+
+    /**
+     * Check available tables for a specific date
+     */
+    public function checkAvailableTables(Request $request)
+    {
+        $tanggal = $request->query('tanggal');
+        
+        if (!$tanggal) {
+            return response()->json(['error' => 'Tanggal tidak valid'], 400);
+        }
+
+        // Get all tables
+        $meja = Meja::all();
+        
+        // Get booked reservations for this date
+        $bookedMejaIds = Reservasi::whereDate('tanggal_reservasi', $tanggal)
+            ->whereIn('status', ['approved', 'completed'])
+            ->pluck('meja_id')
+            ->toArray();
+
+        // Format response with availability status
+        $result = $meja->map(function ($item) use ($bookedMejaIds) {
+            $isBooked = in_array($item->id, $bookedMejaIds);
+            $isMaintenance = $item->status !== 'tersedia';
+            
+            $status = 'available';
+            $label = '';
+            
+            if ($isMaintenance) {
+                $status = 'maintenance';
+                $label = ' (Maintenance)';
+            } elseif ($isBooked) {
+                $status = 'booked';
+                $label = ' (Sudah Dibooking)';
+            }
+
+            return [
+                'id' => $item->id,
+                'nomor_meja' => $item->nomor_meja,
+                'kapasitas' => $item->kapasitas,
+                'harga' => $item->harga ?? 0,
+                'status' => $status,
+                'label' => $label,
+            ];
+        });
+
+        return response()->json($result);
     }
 
     /**
@@ -84,6 +133,17 @@ class ReservasiController extends Controller
             return back()->withErrors(['jumlah_orang' => 'Jumlah orang melebihi kapasitas meja']);
         }
 
+        // Check for double booking - prevent booking same table at same time on same day
+        $existingBooking = Reservasi::where('meja_id', $validated['meja_id'])
+            ->whereDate('tanggal_reservasi', $validated['tanggal_reservasi'])
+            ->where('jam_reservasi', $validated['jam_mulai'])
+            ->whereIn('status', ['approved', 'completed'])
+            ->first();
+
+        if ($existingBooking) {
+            return back()->withErrors(['jam_mulai' => 'Meja dan jam tersebut sudah dipesan. Silakan pilih waktu lain.']);
+        }
+
         // Store in session
         session(['reservasi_temp' => $validated]);
 
@@ -91,7 +151,7 @@ class ReservasiController extends Controller
     }
 
     /**
-     * Show step 3: Confirmation
+     * Show step 2: Customer information
      */
     public function step3(Request $request)
     {
@@ -102,12 +162,31 @@ class ReservasiController extends Controller
 
         $validated = $request->validate([
             'nama_pemesan' => 'required|string|max:255',
-            'kontak_pemesan' => 'required|string|max:20',
+            'country_code' => 'required|in:ID,MY,SG,TH,PH',
+            'kontak_pemesan' => 'required|regex:/^[0-9]{9,12}$/',
             'catatan' => 'nullable|string',
         ]);
 
+        // Format phone number with country code
+        $countryDialCode = [
+            'ID' => '+62',
+            'MY' => '+60',
+            'SG' => '+65',
+            'TH' => '+66',
+            'PH' => '+63',
+        ];
+
+        // Remove leading 0 if present and add country dial code
+        $phone = ltrim($validated['kontak_pemesan'], '0');
+        $fullPhoneNumber = $countryDialCode[$validated['country_code']] . $phone;
+
         // Merge with temp data
-        $reservasiData = array_merge($temp, $validated);
+        $reservasiData = array_merge($temp, [
+            'nama_pemesan' => $validated['nama_pemesan'],
+            'kontak_pemesan' => $fullPhoneNumber,
+            'country_code' => $validated['country_code'],
+            'catatan' => $validated['catatan'] ?? null,
+        ]);
         session(['reservasi_temp' => $reservasiData]);
 
         $meja = Meja::findOrFail($temp['meja_id']);
@@ -157,17 +236,15 @@ class ReservasiController extends Controller
             'meja_id' => $temp['meja_id'],
             'nama_pemesan' => $temp['nama_pemesan'],
             'kontak_pemesan' => $temp['kontak_pemesan'],
+            'country_code' => $temp['country_code'] ?? 'ID',
             'tanggal_reservasi' => $temp['tanggal_reservasi'],
             'jam_reservasi' => $temp['jam_mulai'],
             'jam_selesai' => null,
             'jumlah_orang' => $temp['jumlah_orang'],
             'catatan' => $temp['catatan'] ?? null,
-            'status' => 'approved', // Changed from 'pending' to 'approved'
+            'status' => 'approved',
+            'payment_method' => $validated['payment_method'],
         ]);
-
-        // TODO: Store payment method for reference
-        // $reservasi->payment_method = $validated['payment_method'];
-        // $reservasi->save();
 
         // Clear session
         session()->forget(['reservasi_temp']);

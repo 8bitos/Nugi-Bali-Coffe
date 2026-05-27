@@ -75,13 +75,30 @@
                     <p class="text-xs text-gray-500 mt-1">Berdasarkan akun Anda</p>
                 </div>
 
-                <!-- Kontak Pemesan -->
+                <!-- Kontak Pemesan with Country Code -->
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">No. Telepon</label>
-                    <input type="tel" name="kontak_pemesan" value="{{ old('kontak_pemesan') }}" 
-                           placeholder="08xx-xxxx-xxxx"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
+                    <div class="flex gap-2">
+                        <!-- Country Code Selector -->
+                        <select name="country_code" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent w-24">
+                            <option value="ID" selected>🇮🇩 +62</option>
+                            <option value="MY">🇲🇾 +60</option>
+                            <option value="SG">🇸🇬 +65</option>
+                            <option value="TH">🇹🇭 +66</option>
+                            <option value="PH">🇵🇭 +63</option>
+                        </select>
+                        <!-- Phone Number Input -->
+                        <input type="tel" name="kontak_pemesan" value="{{ old('kontak_pemesan') }}" 
+                               placeholder="8xx-xxxx-xxxx"
+                               pattern="[0-9]{9,12}"
+                               class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" 
+                               required>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Mulai dengan 0 untuk Indonesia (0812...) atau tanpa 0 untuk negara lain</p>
                     @error('kontak_pemesan')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                    @error('country_code')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>

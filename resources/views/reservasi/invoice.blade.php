@@ -422,7 +422,13 @@
                 <div class="invoice-info-col">
                     <h3>Data Pemesan</h3>
                     <p class="detail-value">{{ $reservasi->nama_pemesan }}</p>
-                    <p class="detail-label">{{ $reservasi->kontak_pemesan }}</p>
+                    <p class="detail-label">
+                        @php
+                            $countryFlags = ['ID' => '🇮🇩', 'MY' => '🇲🇾', 'SG' => '🇸🇬', 'TH' => '🇹🇭', 'PH' => '🇵🇭'];
+                            $flag = $countryFlags[$reservasi->country_code ?? 'ID'] ?? '🌍';
+                        @endphp
+                        {{ $flag }} {{ $reservasi->kontak_pemesan }}
+                    </p>
                     <p class="detail-label">{{ $reservasi->user->email }}</p>
                 </div>
                 <div class="invoice-info-col">
