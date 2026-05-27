@@ -24,10 +24,17 @@ yarn-error.log*
 /public/hot
 /public/storage
 /project_pdf.txt
+/project.pdf
+/wireframe_figma_nugi.md
+/*.drawio
+/nugi_wireframe_*.svg
+/clean_emojis.ps1
 /storage/logs
 /storage/*.key
 /storage/pail
 /vendor
+/.bkp
+/*.bkp
 _ide_helper.php
 Homestead.json
 Homestead.yaml

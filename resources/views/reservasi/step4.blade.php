@@ -131,11 +131,11 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    @php
-        $footerInfo = \App\Models\InformasiWeb::first();
-    @endphp
-    <footer class="bg-gradient-to-r from-blue-900 to-cyan-900 text-white mt-16 shrink-0">
+    @include('layouts.partials.footer')
+
+    <script>
+        // Enable/disable submit button based on checkbox
+        const termsCheckbox = document.querySelector('input[name="terms_accepted"]');
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>

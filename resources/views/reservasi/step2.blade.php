@@ -144,35 +144,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-blue-900 to-cyan-900 text-white mt-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-4">NUGI BALI</h3>
-                    <p class="text-blue-100">Coffee shop terbaik dengan pelayanan prima...</p>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Menu</h3>
-                    <ul class="space-y-2 text-blue-100">
-                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Beranda</a></li>
-                        <li><a href="{{ route('menu') }}" class="hover:text-white transition">Menu</a></li>
-                        <li><a href="{{ route('galeri') }}" class="hover:text-white transition">Galeri</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Kontak</h3>
-                    <ul class="space-y-2 text-blue-100">
-                        <li>📧 info@nugibali.com</li>
-                        <li>📞 +62 812-3456-7890</li>
-                        <li>📍 Bali</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-blue-800 mt-8 pt-8 text-center text-blue-100">
-                <p>© 2026 NUGI BALI. Semua hak dilindungi.</p>
-            </div>
-        </div>
-    </footer>
+    @include('layouts.partials.footer')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const dropdownBtn = document.getElementById('countryDropdownBtn');

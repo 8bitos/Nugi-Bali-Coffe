@@ -101,41 +101,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    @php
-        $footerInfo = \App\Models\InformasiWeb::first();
-    @endphp
-    <footer class="bg-gradient-to-r from-blue-900 to-cyan-900 text-white mt-16 shrink-0">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div>
-                    <h3 class="text-base font-bold mb-3 uppercase tracking-wider text-white">NUGI BALI</h3>
-                    <p class="text-blue-100/80 text-xs leading-relaxed">{{ $footerInfo?->profil ?? 'Coffee shop terbaik dengan pelayanan prima.' }}</p>
-                </div>
-                <div>
-                    <h3 class="text-base font-bold mb-3 uppercase tracking-wider text-white">Menu</h3>
-                    <ul class="space-y-2 text-blue-100/80 text-xs">
-                        <li><a href="{{ route('home') }}" class="hover:text-white transition">Beranda</a></li>
-                        <li><a href="{{ route('menu') }}" class="hover:text-white transition">Menu</a></li>
-                        <li><a href="{{ route('galeri') }}" class="hover:text-white transition">Galeri</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-base font-bold mb-3 uppercase tracking-wider text-white">Kontak</h3>
-                    <ul class="space-y-2 text-blue-100/80 text-xs">
-                        <li class="flex items-center gap-2">📧 {{ $footerInfo?->kontak_email ?? 'info@nugibali.com' }}</li>
-                        <li class="flex items-center gap-2">📞 {{ $footerInfo?->kontak_telepon ?? '+62 812-3456-7890' }}</li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-base font-bold mb-3 uppercase tracking-wider text-white">Slogan</h3>
-                    <p class="text-blue-100/80 text-xs italic">Space . Moment . Togetherness</p>
-                </div>
-            </div>
-            <div class="border-t border-blue-800/60 mt-8 pt-6 text-center text-blue-200/60 text-xs">
-                <p>&copy; 2026 NUGI BALI. Semua hak dilindungi.</p>
-            </div>
-        </div>
-    </footer>
+    @include('layouts.partials.footer')
 </body>
 </html>
