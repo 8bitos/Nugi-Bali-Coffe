@@ -93,6 +93,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/reservasi/step4', [ReservasiController::class, 'step4'])->name('reservasi.step4');
     Route::post('/reservasi/payment', [ReservasiController::class, 'payment'])->name('reservasi.payment');
     Route::get('/reservasi/success/{id}', [ReservasiController::class, 'success'])->name('reservasi.success');
+    Route::get('/reservasi/invoice/{id}', [ReservasiController::class, 'printInvoice'])->name('reservasi.invoice');
     
     // Legacy routes (kept for backward compatibility)
     Route::get('/reservasi/create', [ReservasiController::class, 'create'])->name('reservasi.create');

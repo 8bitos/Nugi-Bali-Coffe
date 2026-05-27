@@ -74,7 +74,6 @@ class ReservasiController extends Controller
             'meja_id' => 'required|exists:meja,id',
             'tanggal_reservasi' => 'required|date|after:today',
             'jam_mulai' => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
             'jumlah_orang' => 'required|integer|min:1',
         ]);
 
@@ -160,7 +159,7 @@ class ReservasiController extends Controller
             'kontak_pemesan' => $temp['kontak_pemesan'],
             'tanggal_reservasi' => $temp['tanggal_reservasi'],
             'jam_reservasi' => $temp['jam_mulai'],
-            'jam_selesai' => $temp['jam_selesai'],
+            'jam_selesai' => null,
             'jumlah_orang' => $temp['jumlah_orang'],
             'catatan' => $temp['catatan'] ?? null,
             'status' => 'approved', // Changed from 'pending' to 'approved'
@@ -192,6 +191,13 @@ class ReservasiController extends Controller
         $reservasi = Reservasi::with('meja')->findOrFail($id);
         $meja = $reservasi->meja;
         return view('reservasi.success', compact('reservasi', 'meja'));
+    }
+
+    public function printInvoice(string $id)
+    {
+        $reservasi = Reservasi::with('meja')->findOrFail($id);
+        $meja = $reservasi->meja;
+        return view('reservasi.invoice', compact('reservasi', 'meja'));
     }
 
     /**

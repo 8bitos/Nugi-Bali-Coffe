@@ -65,8 +65,8 @@
                             <p class="font-semibold">{{ \Carbon\Carbon::parse($reservasi['tanggal_reservasi'])->format('d F Y') }}</p>
                         </div>
                         <div>
-                            <p class="text-gray-600">Waktu</p>
-                            <p class="font-semibold">{{ $reservasi['jam_mulai'] }} - {{ $reservasi['jam_selesai'] }}</p>
+                            <p class="text-gray-600">Jam Mulai</p>
+                            <p class="font-semibold">{{ $reservasi['jam_mulai'] }}</p>
                         </div>
                         <div>
                             <p class="text-gray-600">Jumlah Orang</p>

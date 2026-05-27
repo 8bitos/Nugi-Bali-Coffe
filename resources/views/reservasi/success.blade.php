@@ -132,7 +132,7 @@
                     <a href="{{ route('home') }}" class="flex-1 px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition text-center">
                         Kembali ke Beranda
                     </a>
-                    <a href="javascript:window.print()" class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">
+                    <a href="{{ route('reservasi.invoice', $reservasi->id) }}" class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">
                         Cetak Konfirmasi
                     </a>
                 </div>

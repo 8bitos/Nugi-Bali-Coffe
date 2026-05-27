@@ -79,24 +79,14 @@
                     @enderror
                 </div>
 
-                <!-- Jam Mulai & Jam Selesai -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Jam Mulai</label>
-                        <input type="time" name="jam_mulai" value="{{ old('jam_mulai', '09:00') }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-                        @error('jam_mulai')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Jam Selesai</label>
-                        <input type="time" name="jam_selesai" value="{{ old('jam_selesai', '11:00') }}"
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
-                        @error('jam_selesai')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <!-- Jam Mulai -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Jam Mulai</label>
+                    <input type="time" name="jam_mulai" value="{{ old('jam_mulai', '09:00') }}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                    @error('jam_mulai')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Pilih Meja -->
