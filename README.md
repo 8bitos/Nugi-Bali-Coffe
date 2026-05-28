@@ -63,6 +63,12 @@ docker compose exec app php artisan migrate --seed
 - Website: http://localhost:8000
 - Vite dev server: http://localhost:5173
 
+Kalau CSS masih belum muncul, jalankan ulang container Node supaya file hot terbaru dibuat ulang:
+
+```bash
+docker compose restart node
+```
+
 ### Kalau Mau Menjalankan Lagi di Lain Waktu
 
 Kalau container sudah pernah dibuat sebelumnya, biasanya cukup jalankan:
@@ -75,6 +81,55 @@ Kalau mau berhenti:
 
 ```bash
 docker compose down
+```
+
+### Mengakses phpMyAdmin
+
+Saya tambahkan service `phpmyadmin` di `docker-compose.yml` — setelah stack berjalan, buka:
+
+```
+http://localhost:8080
+```
+
+Login dengan salah satu akun berikut (default di compose):
+
+- Root: user `root` / password `root` (root MySQL)
+- App user: user `laravel` / password `secret` (user yang dibuat untuk aplikasi)
+
+Kalau phpMyAdmin tidak muncul, cek status container:
+
+```bash
+docker compose ps
+docker compose logs -f phpmyadmin
+```
+
+Catatan keamanan: jangan gunakan password sederhana di produksi; phpMyAdmin sebaiknya hanya diekspos di jaringan yang aman.
+
+### Kalau CSS Tidak Muncul
+
+Project ini memakai Vite untuk file CSS dan JS. Kalau tampilan masih polos, biasanya salah satu dari ini terjadi:
+
+1. Service `node` belum jalan.
+2. Vite gagal start.
+3. Browser masih memakai cache lama.
+
+Langkah cek cepat:
+
+```bash
+docker compose ps
+docker compose logs -f node
+```
+
+Kalau service `node` belum aktif, jalankan lagi:
+
+```bash
+docker compose up -d
+```
+
+Kalau tetap ingin pakai hasil build statis, jalankan:
+
+```bash
+docker compose exec node npm run build
 ```
 
 ## Instalasi
