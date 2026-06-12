@@ -22,7 +22,6 @@ services:
       CACHE_STORE: database
       QUEUE_CONNECTION: database
       SESSION_DRIVER: database
-      SESSION_DOMAIN: localhost
       VITE_APP_NAME: Nugi Bali Coffee
     ports:
       - "8000:8000"
