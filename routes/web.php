@@ -124,5 +124,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::post('/reservasi/{id}/approve', [ReservasiController::class, 'approve'])->name('reservasi.approve');
         Route::post('/reservasi/{id}/reject', [ReservasiController::class, 'reject'])->name('reservasi.reject');
         Route::post('/reservasi/{id}/complete', [ReservasiController::class, 'complete'])->name('reservasi.complete');
+
+        // Change password routes
+        Route::get('password', [AuthController::class, 'showChangePassword'])->name('password.edit');
+        Route::put('password', [AuthController::class, 'changePassword'])->name('password.update');
     });
 });

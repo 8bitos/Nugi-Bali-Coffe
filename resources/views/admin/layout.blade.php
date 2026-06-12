@@ -76,6 +76,15 @@
                         Export
                     </a>
                 </div>
+
+                <div class="pt-4 mt-3 border-t border-slate-800/80">
+                    <p class="px-3 pb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Pengaturan</p>
+
+                    <a href="{{ route('admin.password.edit') }}" class="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-150 {{ request()->routeIs('admin.password.edit') ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/10 font-semibold' : 'text-slate-400 hover:bg-slate-800/60 hover:text-white' }}">
+                        <svg class="w-[18px] h-[18px] shrink-0 {{ request()->routeIs('admin.password.edit') ? 'text-white' : 'text-slate-500 group-hover:text-slate-300' }}" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" /></svg>
+                        Ganti Password
+                    </a>
+                </div>
             </nav>
 
             <!-- User & Logout -->
