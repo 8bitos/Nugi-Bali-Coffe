@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-50 font-poppins">
+    <!-- Global Top Loading Bar -->
+    <div id="global-loading-bar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 z-[9999] transition-all duration-300 ease-out" style="width: 0%; opacity: 0;"></div>
+
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-[260px] bg-slate-900 border-r border-slate-800 transform -translate-x-full lg:translate-x-0 transition duration-200 ease-in-out flex flex-col">
@@ -230,6 +233,82 @@
         });
         document.getElementById('deleteModal')?.addEventListener('click', (e) => {
             if (e.target === e.currentTarget) closeDeleteModal();
+        });
+
+        // Global Page Top Loading Bar
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingBar = document.getElementById('global-loading-bar');
+            
+            function startLoading() {
+                if (!loadingBar) return;
+                loadingBar.style.opacity = '1';
+                loadingBar.style.width = '0%';
+                
+                // Animate progress bar incrementally
+                let width = 0;
+                const interval = setInterval(() => {
+                    if (width >= 90) {
+                        clearInterval(interval);
+                    } else {
+                        width += Math.random() * 15;
+                        if (width > 90) width = 90;
+                        loadingBar.style.width = width + '%';
+                    }
+                }, 150);
+                
+                window._loadingInterval = interval;
+            }
+
+            // Trigger loading bar on sidebar menu link clicks
+            const links = document.querySelectorAll('aside a, header a, main a');
+            links.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    const target = link.getAttribute('target');
+                    
+                    // Only show loading if it's a normal link pointing to another page on same domain
+                    if (href && 
+                        !href.startsWith('#') && 
+                        !href.startsWith('javascript:') && 
+                        target !== '_blank' && 
+                        !e.defaultPrevented && 
+                        e.button === 0 && // Left click only
+                        !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) // No modifier keys
+                    ) {
+                        startLoading();
+                    }
+                });
+            });
+
+            // Trigger loading bar on form submissions and show feedback on submit button
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', (e) => {
+                    if (e.defaultPrevented) return;
+                    
+                    // Skip loading if the form submission is aborted or if it's handled by confirm modal
+                    if (form.getAttribute('id') === 'deleteForm' || form.onsubmit?.toString().includes('confirm')) {
+                        // Let confirmation flow handle it
+                        return;
+                    }
+                    
+                    startLoading();
+                    
+                    // Find submit button and add loading class/text
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        setTimeout(() => {
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = `
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Memproses...
+                            `;
+                        }, 50);
+                    }
+                });
+            });
         });
     </script>
 </body>

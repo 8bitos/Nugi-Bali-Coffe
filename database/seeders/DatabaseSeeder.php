@@ -21,17 +21,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create admin user
-        User::create([
-            'name' => 'Admin',
+        User::updateOrCreate([
             'email' => 'admin@nugi.com',
+        ], [
+            'name' => 'Admin',
             'password' => Hash::make('password123'),
             'role' => 'admin',
         ]);
 
         // Create sample pelanggan users
-        User::create([
-            'name' => 'Pelanggan Test',
+        User::updateOrCreate([
             'email' => 'pelanggan@example.com',
+        ], [
+            'name' => 'Pelanggan Test',
             'password' => Hash::make('password123'),
             'role' => 'pelanggan',
         ]);
