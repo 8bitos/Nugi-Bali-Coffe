@@ -83,6 +83,28 @@ Kalau mau berhenti:
 docker compose down
 ```
 
+### Cara Update Aplikasi
+
+Jika Anda ingin memperbarui aplikasi ke versi terbaru yang ada di GitHub:
+
+1. Tarik (pull) kode terbaru dari repositori GitHub:
+   ```bash
+   git pull origin main
+   ```
+2. Hentikan container lama, lalu build & jalankan kontainer baru:
+   ```bash
+   docker compose down
+   docker compose up -d --build
+   ```
+3. Jalankan migrasi database jika terdapat pembaharuan tabel:
+   ```bash
+   docker compose exec app php artisan migrate
+   ```
+4. Hubungkan ulang folder storage publik (penting untuk memuat logo/gambar):
+   ```bash
+   docker compose exec app php artisan storage:link
+   ```
+
 ### Mengakses phpMyAdmin
 
 Saya tambahkan service `phpmyadmin` di `docker-compose.yml` — setelah stack berjalan, buka:
