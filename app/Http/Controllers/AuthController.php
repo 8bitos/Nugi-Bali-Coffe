@@ -121,4 +121,40 @@ class AuthController extends Controller
 
         return back()->withErrors(['email' => 'Email atau password salah'])->onlyInput('email');
     }
+
+    /**
+     * Show change password form
+     */
+    public function showChangePassword()
+    {
+        return view('admin.change-password');
+    }
+
+    /**
+     * Handle change password
+     */
+    public function changePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => 'required|string',
+            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'current_password.required' => 'Password saat ini wajib diisi.',
+            'password.required' => 'Password baru wajib diisi.',
+            'password.min' => 'Password baru minimal harus 6 karakter.',
+            'password.confirmed' => 'Konfirmasi password baru tidak cocok.'
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini salah.'])->onlyInput('current_password');
+        }
+
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Password berhasil diperbarui.');
+    }
 }

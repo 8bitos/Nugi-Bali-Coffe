@@ -20,25 +20,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user
-        User::updateOrCreate(
-            ['email' => 'admin@nugi.com'],
-            [
-                'name' => 'Admin',
-                'password' => Hash::make('password123'),
-                'role' => 'admin',
-            ]
-        );
+        User::updateOrCreate([
+            'email' => 'admin@nugi.com',
+        ], [
+            'name' => 'Admin',
+            'password' => Hash::make('password123'),
+            'role' => 'admin',
+        ]);
 
         // Create sample pelanggan users
-        User::updateOrCreate(
-            ['email' => 'pelanggan@example.com'],
-            [
-                'name' => 'Pelanggan Test',
-                'password' => Hash::make('password123'),
-                'role' => 'pelanggan',
-            ]
-        );
+        User::updateOrCreate([
+            'email' => 'pelanggan@example.com',
+        ], [
+            'name' => 'Pelanggan Test',
+            'password' => Hash::make('password123'),
+            'role' => 'pelanggan',
+        ]);
 
         // Create informasi web
         InformasiWeb::updateOrCreate(

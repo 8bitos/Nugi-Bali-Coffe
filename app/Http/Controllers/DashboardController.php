@@ -130,7 +130,8 @@ class DashboardController extends Controller
     public function reservasiReport()
     {
         $reservasi = Reservasi::with('user', 'meja')->latest()->get();
-        return view('admin.reservasi.report', compact('reservasi'));
+        $info = \App\Models\InformasiWeb::first();
+        return view('admin.reservasi.report', compact('reservasi', 'info'));
     }
 
     /**
@@ -194,7 +195,8 @@ class DashboardController extends Controller
         }
 
         // Default: PDF
-        $pdf = Pdf::loadView('admin.reservasi.pdf', compact('reservasi', 'status', 'dariTanggal', 'sampaiTanggal'));
+        $info = \App\Models\InformasiWeb::first();
+        $pdf = Pdf::loadView('admin.reservasi.pdf', compact('reservasi', 'status', 'dariTanggal', 'sampaiTanggal', 'info'));
         $pdf->setPaper('a4', 'landscape');
         return $pdf->download($filename . '.pdf');
     }

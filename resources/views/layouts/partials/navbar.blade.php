@@ -2,6 +2,9 @@
     $navbarInfo = \App\Models\InformasiWeb::first();
 @endphp
 
+<!-- Global Top Loading Bar for Public Pages -->
+<div id="global-loading-bar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 z-[9999] transition-all duration-300 ease-out" style="width: 0%; opacity: 0; pointer-events: none;"></div>
+
 <nav class="bg-white shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex justify-between items-center">
@@ -108,6 +111,73 @@
         document.getElementById('mobileMenuBtn')?.addEventListener('click', function() {
             const menu = document.getElementById('mobileMenu');
             if (menu) menu.classList.toggle('hidden');
+        });
+
+        // Global Page Top Loading Bar
+        const loadingBar = document.getElementById('global-loading-bar');
+        
+        function startLoading() {
+            if (!loadingBar) return;
+            loadingBar.style.opacity = '1';
+            loadingBar.style.width = '0%';
+            
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= 90) {
+                    clearInterval(interval);
+                } else {
+                    width += Math.random() * 15;
+                    if (width > 90) width = 90;
+                    loadingBar.style.width = width + '%';
+                }
+            }, 150);
+            
+            window._loadingInterval = interval;
+        }
+
+        // Trigger loading bar on navigation link clicks
+        const links = document.querySelectorAll('nav a, #mobileMenu a, body a');
+        links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+                
+                if (href && 
+                    !href.startsWith('#') && 
+                    !href.startsWith('javascript:') && 
+                    target !== '_blank' && 
+                    !e.defaultPrevented && 
+                    e.button === 0 && 
+                    !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey)
+                ) {
+                    startLoading();
+                }
+            });
+        });
+
+        // Trigger loading bar on form submissions (like reservation steps)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                if (e.defaultPrevented) return;
+                startLoading();
+                
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    setTimeout(() => {
+                        submitBtn.disabled = true;
+                        const hasIcon = submitBtn.querySelector('svg');
+                        if (!hasIcon) {
+                            submitBtn.innerHTML = `
+                                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Memproses...
+                            `;
+                        }
+                    }, 50);
+                }
+            });
         });
     });
 </script>
