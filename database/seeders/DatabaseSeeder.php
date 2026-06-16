@@ -21,30 +21,36 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create admin user
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@nugi.com',
-            'password' => Hash::make('password123'),
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@nugi.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('password123'),
+                'role' => 'admin',
+            ]
+        );
 
         // Create sample pelanggan users
-        User::create([
-            'name' => 'Pelanggan Test',
-            'email' => 'pelanggan@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'pelanggan',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'pelanggan@example.com'],
+            [
+                'name' => 'Pelanggan Test',
+                'password' => Hash::make('password123'),
+                'role' => 'pelanggan',
+            ]
+        );
 
         // Create informasi web
-        InformasiWeb::create([
-            'nama_web' => 'Nugi Bali',
-            'profil' => 'Nugi Bali adalah coffee shop yang menyediakan berbagai macam menu makanan dan minuman berkualitas dengan suasana yang nyaman.',
-            'kontak_email' => 'info@nugibali.com',
-            'kontak_telepon' => '+62 812-3456-7890',
-            'alamat' => 'Jl. Example No. 123, Bali, Indonesia',
-            'lokasi_url' => 'https://maps.google.com',
-        ]);
+        InformasiWeb::updateOrCreate(
+            ['nama_web' => 'Nugi Bali'],
+            [
+                'profil' => 'Nugi Bali adalah coffee shop yang menyediakan berbagai macam menu makanan dan minuman berkualitas dengan suasana yang nyaman.',
+                'kontak_email' => 'info@nugibali.com',
+                'kontak_telepon' => '+62 812-3456-7890',
+                'alamat' => 'Jl. Example No. 123, Bali, Indonesia',
+                'lokasi_url' => 'https://maps.google.com',
+            ]
+        );
 
         // Create real system menus
         \DB::table('menu')->truncate();
@@ -144,45 +150,36 @@ class DatabaseSeeder extends Seeder
         \DB::table('menu')->insert($menus);
 
         // Create sample meja
-        \DB::table('meja')->insert([
-            'nomor_meja' => 'Meja 1',
-            'kapasitas' => 2,
-            'status' => 'tersedia',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        Meja::updateOrCreate(
+            ['nomor_meja' => 'Meja 1'],
+            ['kapasitas' => 2, 'status' => 'tersedia']
+        );
 
-        \DB::table('meja')->insert([
-            'nomor_meja' => 'Meja 2',
-            'kapasitas' => 4,
-            'status' => 'tersedia',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        Meja::updateOrCreate(
+            ['nomor_meja' => 'Meja 2'],
+            ['kapasitas' => 4, 'status' => 'tersedia']
+        );
 
-        \DB::table('meja')->insert([
-            'nomor_meja' => 'Meja 3',
-            'kapasitas' => 6,
-            'status' => 'tersedia',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        Meja::updateOrCreate(
+            ['nomor_meja' => 'Meja 3'],
+            ['kapasitas' => 6, 'status' => 'tersedia']
+        );
 
         // Create sample galeri
-        \DB::table('galeri')->insert([
-            'judul' => 'Interior Coffee Shop',
-            'foto' => 'galeri/interior.jpg',
-            'deskripsi' => 'Pemandangan interior coffee shop kami yang nyaman',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        Galeri::updateOrCreate(
+            ['judul' => 'Interior Coffee Shop'],
+            [
+                'foto' => 'galeri/interior.jpg',
+                'deskripsi' => 'Pemandangan interior coffee shop kami yang nyaman',
+            ]
+        );
 
-        \DB::table('galeri')->insert([
-            'judul' => 'Menu Favorit',
-            'foto' => 'galeri/menu.jpg',
-            'deskripsi' => 'Salah satu menu favorit pelanggan kami',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        Galeri::updateOrCreate(
+            ['judul' => 'Menu Favorit'],
+            [
+                'foto' => 'galeri/menu.jpg',
+                'deskripsi' => 'Salah satu menu favorit pelanggan kami',
+            ]
+        );
     }
 }
