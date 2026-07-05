@@ -61,7 +61,7 @@
         </div>
         
         <!-- Filter Tabs -->
-        <div class="flex justify-center gap-3 mb-12">
+        <div class="flex justify-center gap-3 mb-12 flex-wrap">
             <a href="{{ route('menu', ['kategori' => 'semua']) }}" 
                class="px-5 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 {{ $kategori === 'semua' ? 'bg-blue-900 text-white shadow-md' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50' }}">
                 Semua

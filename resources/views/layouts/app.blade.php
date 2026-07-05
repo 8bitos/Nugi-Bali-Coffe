@@ -7,29 +7,61 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-100">
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="{{ url('/') }}" class="flex items-center gap-3">
-                <img src="{{ asset('assets/images/logo.png') }}" alt="Nugi Bali" class="h-10">
-                <span class="text-2xl font-bold text-blue-600">Nugi Bali</span>
-            </a>
-            <div class="flex items-center gap-4">
-                @auth
-                    @if(auth()->user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Dashboard</a>
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex justify-between items-center">
+                <a href="{{ url('/') }}" class="flex items-center gap-3">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Nugi Bali" class="h-10">
+                    <span class="text-2xl font-bold text-blue-600">Nugi Bali</span>
+                </a>
+                
+                <!-- Hamburger Button for Mobile -->
+                <div class="flex items-center md:hidden">
+                    <button id="mobileMenuBtn" class="text-blue-600 hover:text-black focus:outline-none transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-4">
+                    @auth
+                        @if(auth()->user()->role === 'admin')
+                            <a href="{{ route('admin.dashboard') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Dashboard</a>
+                        @else
+                            <a href="{{ route('pelanggan.dashboard') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Dashboard Saya</a>
+                            <a href="{{ route('pelanggan.reservasi') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Reservasi Saya</a>
+                        @endif
+                        <span class="text-gray-500 text-sm">{{ auth()->user()->name }}</span>
+                        <form method="POST" action="{{ route('auth.logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-red-600 hover:text-red-800 font-semibold text-sm">Logout</button>
+                        </form>
                     @else
-                        <a href="{{ route('pelanggan.dashboard') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Dashboard Saya</a>
-                        <a href="{{ route('pelanggan.reservasi') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Reservasi Saya</a>
+                        <a href="{{ route('auth.login') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Login</a>
+                        <a href="{{ route('auth.register') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Register</a>
+                    @endauth
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 space-y-3 pb-4 border-t border-gray-100 pt-3">
+                @auth
+                    <div class="px-3 py-1.5 text-xs text-gray-500 font-semibold bg-gray-50 rounded-xl mb-2">Masuk sebagai: <span class="text-blue-600">{{ auth()->user()->name }}</span></div>
+                    @if(auth()->user()->role === 'admin')
+                        <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 text-blue-600 hover:text-black font-semibold">Dashboard Admin</a>
+                    @else
+                        <a href="{{ route('pelanggan.dashboard') }}" class="block px-3 py-2 text-blue-600 hover:text-black font-semibold">Dashboard Saya</a>
+                        <a href="{{ route('pelanggan.reservasi') }}" class="block px-3 py-2 text-blue-600 hover:text-black font-semibold">Reservasi Saya</a>
                     @endif
-                    <span class="text-gray-500 text-sm">{{ auth()->user()->name }}</span>
-                    <form method="POST" action="{{ route('auth.logout') }}" class="inline">
+                    <form method="POST" action="{{ route('auth.logout') }}" class="mt-2">
                         @csrf
-                        <button type="submit" class="text-red-600 hover:text-red-800 font-semibold text-sm">Logout</button>
+                        <button type="submit" class="block w-full text-left px-3 py-2 text-red-600 hover:text-red-800 font-semibold cursor-pointer">Logout</button>
                     </form>
                 @else
-                    <a href="{{ route('auth.login') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Login</a>
-                    <a href="{{ route('auth.register') }}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">Register</a>
-                    <a href="{{ route('admin.login') }}" class="text-purple-600 hover:text-purple-800 font-semibold text-sm">Admin</a>
+                    <a href="{{ route('auth.login') }}" class="block px-3 py-2 text-blue-600 hover:text-black font-semibold">Login</a>
+                    <a href="{{ route('auth.register') }}" class="block px-3 py-2 text-blue-600 hover:text-black font-semibold">Register</a>
                 @endauth
             </div>
         </div>
@@ -135,6 +167,12 @@
                         }, 50);
                     }
                 });
+            });
+
+            // Mobile Menu Toggle
+            document.getElementById('mobileMenuBtn')?.addEventListener('click', function() {
+                const menu = document.getElementById('mobileMenu');
+                if (menu) menu.classList.toggle('hidden');
             });
         });
     </script>

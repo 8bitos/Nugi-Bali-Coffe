@@ -109,7 +109,7 @@
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col lg:ml-[260px]">
+        <div class="flex-1 flex flex-col lg:ml-[260px] min-w-0">
             <!-- Top Bar -->
             <header class="h-16 bg-white border-b border-gray-200/80 flex items-center justify-between px-4 sm:px-6 lg:px-8 shrink-0">
                 <div class="flex items-center gap-4">
@@ -136,7 +136,7 @@
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 min-w-0 w-full">
                 <!-- Flash Messages -->
                 @if(session('success'))
                     <div id="flashSuccess" class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 flex items-center justify-between animate-fade-in">

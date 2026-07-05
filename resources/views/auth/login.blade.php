@@ -13,7 +13,7 @@
             <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
                 <div class="text-center mb-8">
                     <h2 class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Login</h2>
-                    <p class="text-gray-600 text-sm mt-2">Masuk ke akun pelanggan Anda</p>
+                    <p class="text-gray-600 text-sm mt-2">Masuk ke akun Anda</p>
                 </div>
 
                 @if ($errors->any())
@@ -45,9 +45,7 @@
                     <a href="{{ route('register') }}" class="block w-full bg-gray-100 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-200 transition text-center">Daftar di sini</a>
                 </div>
 
-                <div class="mt-4">
-                    <a href="{{ route('admin.login') }}" class="block text-blue-600 hover:text-blue-700 text-sm text-center font-semibold">Admin? Login di sini</a>
-                </div>
+
 
                 <div class="mt-6 text-center">
                     <a href="{{ route('home') }}" class="text-gray-600 hover:text-gray-700 text-sm">← Kembali ke beranda</a>

@@ -33,11 +33,10 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Admin login routes
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('/login', [AuthController::class, 'showAdminLogin'])->name('admin.login');
-    Route::post('/login', [AuthController::class, 'adminLogin'])->name('admin.login.post');
-});
+// Admin login redirect to unified login page
+Route::get('/admin/login', function () {
+    return redirect()->route('login');
+})->name('admin.login');
 
 // Public pages (no auth required)
 Route::get('/tentang', function () {
